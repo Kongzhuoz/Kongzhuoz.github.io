@@ -1,1 +1,202 @@
+<!DOCTYPE html>
+<html>
 
+<head>
+  <title>视频播放器</title>
+</head>
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+  }
+
+  h2 {
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
+    bottom: 88vh;
+    font-size: 40px;
+  }
+
+  select {
+    width: 200px;
+    border: none;
+    border-radius: 5px;
+    background-color: #F1F1F1;
+    color: #505050;
+
+  }
+
+  .video-container {
+    margin-top: 70px;
+    width: 800px;
+    height: 450px;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+  }
+
+  #custom-button1,
+  #custom-button2,
+  #play-pause-button,
+  #random-play-button,
+  #jump-button {
+    position: absolute;
+    bottom: 20vh;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+  #custom-button1 {
+    left: 30%;
+  }
+
+  #custom-button2 {
+    left: 50%;
+  }
+
+  #play-pause-button {
+    left: 40%;
+  }
+
+  #random-play-button {
+    left: 65%;
+  }
+  
+
+  #jump-input {
+    position: absolute;
+    bottom: 12.1vh;
+    left: 60%;
+    transform: translateX(-50%);
+    padding: 5px;
+    font-size: 20px;
+  }
+
+  #jump-button {
+    bottom: 12vh;
+  }
+
+  #video-select {
+    position: absolute;
+    bottom: 28vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    font-size: 16px;
+  }
+</style>
+
+<body>
+  <h2>VideoPlayer</h2>
+  <div class="video-container">
+    <video id="myVideo" controls>
+      <source src="video/h001.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <select id="video-select">
+    <option value="video/h001.mp4">视频1</option>
+    <option value="video/h002.mp4">视频2</option>
+    <option value="video/h003.mp4">视频3</option>
+    <option value="video/h004.mp4">视频4</option>
+    <option value="video/h005.mp4">视频5</option>
+    <option value="video/h006.mp4">视频6</option>
+    <option value="video/h007.mp4">视频7</option>
+    <option value="video/h008.mp4">视频8</option>
+    <option value="video/h009.mp4">视频9</option>
+    <option value="video/h010.mp4">视频10</option>
+    <option value="video/h011.mp4">视频11</option>
+    <option value="video/h012.mp4">视频12</option>
+    <option value="video/h013.mp4">视频13</option>
+    <option value="video/h014.mp4">视频14</option>
+    <option value="video/h015.mp4">视频15</option>
+    <option value="video/h016.mp4">视频16</option>
+    <option value="video/h017.mp4">视频17</option>
+    <option value="video/h018.mp4">视频18</option>
+    <option value="video/h019.mp4">视频19</option>
+    <!-- 添加更多视频选项 -->
+  </select>
+
+  <button id="custom-button1" onclick="previous()">上一集</button>
+  <button id="play-pause-button">播放</button>
+  <button id="custom-button2" onclick="next()">下一集</button>
+  <button id="random-play-button">随机播放</button>
+  <input type="text" id="jump-input" placeholder="跳转时间（秒）">
+  <button id="jump-button">跳转</button>
+
+  <script>
+    var videos = [
+      'video/h001.mp4', 'video/h002.mp4', 'video/h003.mp4', 'video/h004.mp4', 'video/h005.mp4', 'video/h006.mp4', 'video/h007.mp4', 'video/h008.mp4', 'video/h009.mp4', 'video/h010.mp4', 'video/h011.mp4', 'video/h012.mp4', 'video/h013.mp4', 'video/h014.mp4', 'video/h015.mp4', 'video/h016.mp4', 'video/h017.mp4', 'video/h018.mp4', 'video/h019.mp4'
+    ];
+
+    var videoIndex = 0;
+    var videoElement = document.getElementById('myVideo');
+    var playPauseButton = document.getElementById('play-pause-button');
+    videoElement.src = videos[videoIndex];
+    var randomPlayButton = document.getElementById('random-play-button');
+    var jumpInput = document.getElementById('jump-input');
+    var jumpButton = document.getElementById('jump-button');
+    var videoSelect = document.getElementById('video-select');
+
+    function previous() {
+      if (videoIndex > 0) {
+        videoIndex--;
+        videoElement.src = videos[videoIndex];
+      }
+    }
+
+    function next() {
+      if (videoIndex < videos.length - 1) {
+        videoIndex++;
+        videoElement.src = videos[videoIndex];
+      }
+    }
+
+    function togglePlayPause() {
+      if (videoElement.paused) {
+        videoElement.play();
+        playPauseButton.innerHTML = '暂停';
+      } else {
+        videoElement.pause();
+        playPauseButton.innerHTML = '播放';
+      }
+    }
+
+    function playRandomVideo() {
+      videoElement.pause();
+      videoIndex = Math.floor(Math.random() * videos.length);
+      videoElement.src = videos[videoIndex];
+      videoElement.play();
+    }
+
+    function jumpToTime() {
+      var time = parseInt(jumpInput.value);
+      if (!isNaN(time)) {
+        videoElement.currentTime = time;
+      }
+    }
+
+    function selectVideo() {
+      var selectedVideo = videoSelect.value;
+      videoElement.src = selectedVideo;
+      videoIndex = videos.indexOf(selectedVideo);
+    }
+
+    randomPlayButton.addEventListener('click', playRandomVideo);
+    playPauseButton.addEventListener('click', togglePlayPause);
+    jumpButton.addEventListener('click', jumpToTime);
+    videoSelect.addEventListener('change', selectVideo);
+  </script>
+</body>
+
+</html>
